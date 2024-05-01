@@ -20,7 +20,20 @@
             const form = document.getElementById('addManagerForm');
             const formData = new FormData(form);
             const jsonData = {};
-            formData.forEach((value, key) => { jsonData[key] = value });
+            let allFieldsEmpty = true;
+    
+            formData.forEach((value, key) => {
+                if (value.trim() !== '') {
+                    jsonData[key] = value;
+                    allFieldsEmpty = false;
+                }
+            });
+    
+            if (allFieldsEmpty) {
+                console.log('Please fill in at least one field.');
+                return;
+            }
+    
             fetch('/addManager', {
                 method: 'POST',
                 headers: {
@@ -31,7 +44,8 @@
             .then(response => response.text())
             .then(message => {
                 console.log(message);
-                // Optionally, display a success message or redirect to another page
+                // Clear input fields
+                form.reset();
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -39,5 +53,6 @@
             });
         }
     </script>
+    
 </body>
 </html>

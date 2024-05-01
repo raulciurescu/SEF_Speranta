@@ -15,21 +15,16 @@ DB_admin = client["Restaurants_Management"] # Create a database called 'DB_admin
 
 
 
-print("Function is executed. And Manager is added.")
+
 create_table_Manager(DB_admin)
 create_table_Staff(DB_admin)
 create_table_Menue(DB_admin)
 create_table_Orders(DB_admin)
 create_table_Reservations(DB_admin)
-url = "http://127.0.0.1:5000/addManager"
-data = {
-        "ManagerName": "Raul" ,
-        "ManagerEmail" : "raul.ciurescu@studentupt.ro" ,
-        "ManagerPassword" : "1234567890"
-        }
-        
 
-@app.route('/')
+
+
+@app.route('/addManager')
 def index():
     return render_template('ptManager.html')
 
