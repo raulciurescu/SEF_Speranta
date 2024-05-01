@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Manager</title>
+</head>
+<body>
+    <h2>Add Manager</h2>
+    <form id="addManagerForm">
+        <label for="ManagerName">Manager Name:</label><br>
+        <input type="text" id="ManagerName" name="ManagerName"><br>
+        <label for="ManagerEmail">Manager Email:</label><br>
+        <input type="email" id="ManagerEmail" name="ManagerEmail"><br>
+        <label for="ManagerPassword">Manager Password:</label><br>
+        <input type="password" id="ManagerPassword" name="ManagerPassword"><br><br>
+        <button type="button" onclick="addManager()">Submit</button>
+    </form>
+
+    <script>
+        function addManager() {
+            const form = document.getElementById('addManagerForm');
+            const formData = new FormData(form);
+            const jsonData = {};
+            formData.forEach((value, key) => { jsonData[key] = value });
+            fetch('/addManager', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+            .then(response => response.text())
+            .then(message => {
+                console.log(message);
+                // Optionally, display a success message or redirect to another page
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+            });
+        }
+    </script>
+</body>
+</html>
