@@ -65,43 +65,34 @@ def dashboard():
 def index3():
     return render_template('AddStaff.html')
 
-@app.route('/AddStaff', methods=['POST'])
-def add_staff():
-    data = request.json
-    staff_id = data.get('StaffID')
-    staff_name = data.get('StaffName')
-    staff_email = data.get('StaffEmail')
-    staff_password = data.get('StaffPassword')
-    staff = {
-        "StaffID": staff_id,
-        "StaffName": staff_name,
-        "StaffEmail": staff_email,
-        "StaffPassword": staff_password
-    }
-    DB_admin.Staff.insert_one(staff)
-    return "Staff added successfully"
+@app.route('/AddStaff', methods=['GET', 'POST'])
+def manage_staff():
+    if request.method == 'POST':
+        # Check if the request contains data to add staff
+        if request.json:
+            staff_data = request.json
+            DB_admin.Staff.insert_many(staff_data)
+            return "Staff added successfully"
+        # Check if the request is to delete all staff
+        elif request.form.get('action') == 'deleteAll':
+            # You can add code here to delete all staff from the database
+            # For example:
+            # DB_admin.Staff.delete_many({})  # Delete all staff records from the collection
+            return "All staff deleted successfully"
+    # Render the template for adding staff
+    return render_template('AddStaff.html')
 
 
+@app.route('/AddMenue')
+def index4():
+    return render_template('Menue.html')
 
-
-
-@app.route('/addMenue', methods=['GET','POST'])
+@app.route('/AddMenue', methods=['POST'])
 def add_menue():
-    menue = request.get_json()
-    DB_admin.Menue.insert_one(menue)    
-    return jsonify({"message": "Menue added successfully"}), 200
-
-@app.route('/addOrders', methods=['GET','POST'])
-def add_orders():
-    orders = request.get_json()
-    DB_admin.Orders.insert_one(orders)
-    return jsonify({"message": "Orders added successfully"}), 200
-
-@app.route('/addReservations', methods=['GET','POST'])
-def add_reservations():
-    reservations = request.get_json()
-    DB_admin.Reservations.insert_one(reservations)
-    return jsonify({"message": "Reservations added successfully"}), 200
+    data = request.json
+    menu_items = data
+    DB_admin.Menue.insert_many(menu_items)  # Use insert_many to insert multiple documents
+    return "Menue added successfully"
 
 if __name__ == '__main__':
     app.run(debug=True)

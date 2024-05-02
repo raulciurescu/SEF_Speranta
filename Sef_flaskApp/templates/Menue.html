@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Menu Item</title>
+    <style>
+        /* Add your CSS styles here */
+        #addItemForm {
+            margin-bottom: 20px;
+        }
+
+        #addMoreBtn, #addMenuBtn {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h2>Add Menu Item</h2>
+    <div id="menuItems">
+        <form class="addItemForm">
+            <label for="category">Category:</label><br>
+            <input type="text" class="category" name="category" required><br>
+            <label for="productName">Product Name:</label><br>
+            <input type="text" class="productName" name="productName" required><br>
+            <label for="description">Description:</label><br>
+            <textarea class="description" name="description" rows="4" cols="50" required></textarea><br>
+            <label for="price">Price:</label><br>
+            <input type="number" class="price" name="price" required><br><br>
+        </form>
+    </div>
+
+    <button id="addMenuBtn">Add Menu</button>
+
+    <button id="addMoreBtn">Add More Items</button>
+
+    <script>
+        function addMenu() {
+            const itemForms = document.querySelectorAll('.addItemForm');
+            const menuItems = [];
+    
+            itemForms.forEach(form => {
+                const category = form.querySelector('.category').value;
+                const productName = form.querySelector('.productName').value;
+                const description = form.querySelector('.description').value;
+                const price = form.querySelector('.price').value;
+    
+                menuItems.push({
+                    Category: category,
+                    ProductName: productName,
+                    Description: description,
+                    Price: price
+                });
+            });
+    
+            fetch('/AddMenue', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(menuItems)  // Send the array of menu items
+            })
+            .then(response => response.text())
+            .then(message => {
+                alert(message);
+                // Optionally, redirect or perform other actions after adding items
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+            });
+        }
+    
+        const addMoreBtn = document.getElementById('addMoreBtn');
+        addMoreBtn.addEventListener('click', () => {
+            const form = document.querySelector('.addItemForm').cloneNode(true);
+            document.getElementById('menuItems').appendChild(form);
+        });
+    
+        const addMenuBtn = document.getElementById('addMenuBtn');
+        addMenuBtn.addEventListener('click', addMenu);
+    </script>
+    
+</body>
+</html>

@@ -7,39 +7,65 @@
 </head>
 <body>
     <h2>Add Staff</h2>
-    <form id="addStaffForm" action="/add_staff" method="post">
-        <label for="StaffID">Staff ID:</label><br>
-        <input type="text" id="StaffID" name="StaffID" required><br>
-        <label for="StaffName">Staff Name:</label><br>
-        <input type="text" id="StaffName" name="StaffName" required><br>
-        <label for="StaffEmail">Staff Email:</label><br>
-        <input type="email" id="StaffEmail" name="StaffEmail" required><br>
-        <label for="StaffPassword">Staff Password:</label><br>
-        <input type="password" id="StaffPassword" name="StaffPassword" required><br><br>
-        <input type="submit" value="Add Staff">
-    </form>
+    <div id="staffForms"></div>
+    <button id="addStaffBtn">Add Staff</button>
+    <button id="addAllStaffBtn">Add All Staffs</button>
+    <button id="deleteAllStaffBtn">Delete All Staffs</button>
 </body>
 </html>
-
 <script>
-    document.getElementById('addStaffForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+    // Function to add a new staff form with empty input fields
+    function addStaffForm() {
+        const staffFormsContainer = document.getElementById('staffForms');
         
-        // Get the form data
-        const staffID = document.getElementById('StaffID').value;
-        const staffName = document.getElementById('StaffName').value;
-        const staffEmail = document.getElementById('StaffEmail').value;
-        const staffPassword = document.getElementById('StaffPassword').value;
+        // Create a new staff form
+        const staffForm = document.createElement('form');
+        staffForm.classList.add('staffForm');
         
-        // Construct the request body
-        const formData = {
-            StaffID: staffID,
-            StaffName: staffName,
-            StaffEmail: staffEmail,
-            StaffPassword: staffPassword
-        };
+        // Add input fields for staff details
+        staffForm.innerHTML = `
+            <label for="StaffID">Staff ID:</label><br>
+            <input type="text" name="StaffID" required><br>
+            <label for="StaffName">Staff Name:</label><br>
+            <input type="text" name="StaffName" required><br>
+            <label for="StaffEmail">Staff Email:</label><br>
+            <input type="email" name="StaffEmail" required><br>
+            <label for="StaffPassword">Staff Password:</label><br>
+            <input type="password" name="StaffPassword" required><br><br>
+            <button type="button" class="deleteBtn">Delete</button><br><br>
+        `;
+        
+        // Add the new staff form to the container
+        staffFormsContainer.appendChild(staffForm);
+        
+        // Attach event listener to delete button
+        const deleteBtn = staffForm.querySelector('.deleteBtn');
+        deleteBtn.addEventListener('click', function() {
+            staffFormsContainer.removeChild(staffForm);
+        });
+    }
 
-        // Send a POST request to the server
+    // Function to handle form submission for all staff forms
+    function submitAllForms() {
+        const staffForms = document.querySelectorAll('.staffForm');
+        const formData = [];
+
+        // Collect data from each staff form
+        staffForms.forEach(form => {
+            const staffID = form.querySelector('[name="StaffID"]').value;
+            const staffName = form.querySelector('[name="StaffName"]').value;
+            const staffEmail = form.querySelector('[name="StaffEmail"]').value;
+            const staffPassword = form.querySelector('[name="StaffPassword"]').value;
+            
+            formData.push({
+                StaffID: staffID,
+                StaffName: staffName,
+                StaffEmail: staffEmail,
+                StaffPassword: staffPassword
+            });
+        });
+
+        // Send data to the server
         fetch('/AddStaff', {
             method: 'POST',
             headers: {
@@ -61,5 +87,20 @@
             console.error('Error adding staff:', error);
             alert('Failed to add staff. Please try again.');
         });
-    });
+    }
+
+    // Function to handle deleting all staff forms
+    function deleteAllStaff() {
+        const staffFormsContainer = document.getElementById('staffForms');
+        staffFormsContainer.innerHTML = ''; // Remove all staff forms
+    }
+
+    // Event listener for add staff button
+    document.getElementById('addStaffBtn').addEventListener('click', addStaffForm);
+
+    // Event listener for add all staffs button
+    document.getElementById('addAllStaffBtn').addEventListener('click', submitAllForms);
+
+    // Event listener for delete all staffs button
+    document.getElementById('deleteAllStaffBtn').addEventListener('click', deleteAllStaff);
 </script>
