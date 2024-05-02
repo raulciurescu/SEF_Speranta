@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Login</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <h2>Manager Login</h2>
+    <form id="managerLoginForm">
+        <label for="username">Email:</label><br>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="Login" onclick="managerLogin()">
+    </form>
+
+    <script>
+        function managerLogin() {
+            const form = document.getElementById('managerLoginForm');
+            const username = form.elements['username'].value;
+            const password = form.elements['password'].value;
+            
+            fetch('/MLogIn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ManagerEmail: username,
+                    ManagerPassword: password
+                })
+            })
+            .then(response => response.text())
+            .then(message => {
+                alert(message);
+                // Optionally, redirect to another page after login
+                if (message === "Manager logged in successfully") {
+                    window.location.href = "/dashboard";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Staff</title>
+</head>
+<body>
+    <h2>Add Staff</h2>
+    <form id="addStaffForm" action="/add_staff" method="post">
+        <label for="StaffID">Staff ID:</label><br>
+        <input type="text" id="StaffID" name="StaffID" required><br>
+        <label for="StaffName">Staff Name:</label><br>
+        <input type="text" id="StaffName" name="StaffName" required><br>
+        <label for="StaffEmail">Staff Email:</label><br>
+        <input type="email" id="StaffEmail" name="StaffEmail" required><br>
+        <label for="StaffPassword">Staff Password:</label><br>
+        <input type="password" id="StaffPassword" name="StaffPassword" required><br><br>
+        <input type="submit" value="Add Staff">
+    </form>
+</body>
+</html>
+
+<script>
+    document.getElementById('addStaffForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        
+        // Get the form data
+        const staffID = document.getElementById('StaffID').value;
+        const staffName = document.getElementById('StaffName').value;
+        const staffEmail = document.getElementById('StaffEmail').value;
+        const staffPassword = document.getElementById('StaffPassword').value;
+        
+        // Construct the request body
+        const formData = {
+            StaffID: staffID,
+            StaffName: staffName,
+            StaffEmail: staffEmail,
+            StaffPassword: staffPassword
+        };
+
+        // Send a POST request to the server
+        fetch('/AddStaff', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                // Redirect to the dashboard if the staff is added successfully
+                window.location.href = '/dashboard';
+            } else {
+                // Display an error message if there was an issue adding the staff
+                console.error('Error adding staff:', response.statusText);
+                alert('Failed to add staff. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error adding staff:', error);
+            alert('Failed to add staff. Please try again.');
+        });
+    });
+</script>
