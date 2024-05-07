@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='App.css') }}">
 </head>
-<body>
-    <h2>Welcome to the Dashboard</h2>
-    <button onclick="location.href='/AddStaff'">Add Staff</button>
-    <button onclick="location.href='/AddMenue'">Add Menu</button>
+<body >
+    <h2 class="title">Welcome to the Dashboard</h2>
+    <button class="button" onclick="location.href='/AddStaff'">Add Staff</button>
+    <button class="button" onclick="location.href='/AddMenue'">Add Menu</button>
 </body>
 </html>

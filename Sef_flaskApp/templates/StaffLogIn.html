@@ -1,46 +1,43 @@
 <!DOCTYPE html>
-<html lang="en" class="App">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager Login</title>
+    <title>Staff Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='App.css') }}">
-
 </head>
-<body class="content">
-    <h2 class="header">Manager Login</h2>
-    <form id="managerLoginForm">
+<body>
+    <h2>Staff Login</h2>
+    <form id="staffLoginForm">
         <label for="username">Email:</label><br>
         <input type="text" id="username" name="username" required><br>
-        <label class="text" for="password">Password:</label><br>
+        <label for="password">Password:</label><br>
         <input type="password" id="password" name="password" required><br><br>
-        <button class="button" type="button" value="Log In" onclick="managerLogin()">Log In</button><br>
-        <label class="text">Don't have an account?</label><br><br>
-        <button type="button" class="button" onclick="location.href='/addManager'">Sign Up</button>
+        <input type="submit" value="Login" onclick="staffLogin()">
     </form>
 
     <script>
-        function managerLogin() {
-            const form = document.getElementById('managerLoginForm');
+        function staffLogin() {
+            const form = document.getElementById('staffLoginForm');
             const username = form.elements['username'].value;
             const password = form.elements['password'].value;
             
-            fetch('/MLogIn', {
+            fetch('/SLogIn', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    ManagerEmail: username,
-                    ManagerPassword: password
+                    StaffEmail: username,
+                    StaffPassword: password
                 })
             })
             .then(response => response.text())
             .then(message => {
                 alert(message);
                 // Optionally, redirect to another page after login
-                if (message === "Manager logged in successfully") {
-                    window.location.href = "/dashboard";
+                if (message === "Staff logged in successfully") {
+                    window.location.href = "/displayOrders";
                 }
             })
             .catch(error => {

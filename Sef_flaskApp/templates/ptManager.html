@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="App">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='App.css') }}">
 </head>
-<body>
-    <h2>Add Manager</h2>
+<body class="content">
+    <h2 class="header">Add Manager</h2>
     <form id="addManagerForm">
-        <label for="ManagerName">Manager Name:</label><br>
-        <input type="text" id="ManagerName" name="ManagerName"><br>
-        <label for="ManagerEmail">Manager Email:</label><br>
-        <input type="email" id="ManagerEmail" name="ManagerEmail"><br>
-        <label for="ManagerPassword">Manager Password:</label><br>
-        <input type="password" id="ManagerPassword" name="ManagerPassword"><br><br>
-        <button type="button" onclick="addManager()">Submit</button>
+        <label for="ManagerName" class="text">Manager Name:</label><br>
+        <input type="text" id="ManagerName" name="ManagerName" class="title"><br>
+        <label for="ManagerEmail" class="text">Manager Email:</label><br>
+        <input type="email" id="ManagerEmail" name="ManagerEmail" class="content"><br>
+        <label for="ManagerPassword" class="text">Manager Password:</label><br>
+        <input type="password" id="ManagerPassword" name="ManagerPassword" class="content"><br><br>
+        <button type="button" class="button" onclick="addManager()">Submit</button><br>
+        <label class="text">Already have an account?</label><br>
+        <button type="button" class="button" onclick="location.href='/MLogIn'">Log In</button>
     </form>
 
     <script>
@@ -48,7 +51,7 @@
                 console.log(message);
                 // Clear input fields
                 form.reset();
-                window.location.href = '/MLogIn';
+                window.location.href = '/LogIn';
             })
             .catch(error => {
                 console.error('Error:', error);

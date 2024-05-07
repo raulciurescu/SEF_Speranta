@@ -19,10 +19,10 @@ table_Menue = {
 }
 
 table_Orders = {
-    "StaffID": {"type": "string"}, # "StaffID": {"type": "string", "required": True}, # "required": True, "unique": True, "index": True, "default": "1234567890
+    "StaffID": {"type": "string"}, 
     "OrderID": {"type": "string"},
-    "OrederProducts": {"type": "string"}, # Fixed typo and removed extra '{'
-    "OrderStatus": {"type" : "string"}, # Fixed syntax error and removed unnecessary dictionary
+    "OrederProducts": {"type": "string"}, 
+    "OrderStatus": {"type" : "string"}, 
     "OrderPrice": {"type": "string"},
 }
 
@@ -31,5 +31,5 @@ table_Reservations = {
     "ReservationPhone": {"type": "string"},
     "ReservationDate": {"type": "string"},
     "ReservationTime": {"type": "string"},
-    "ReservationStatus": {"type" : "string"}, # Fixed syntax error and removed unnecessary dictionary
+    "ReservationStatus": {"type" : "string"}, 
 }
