@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, jsonify, url_for
+from flask import Flask, redirect, render_template, request, jsonify, session, url_for
 from pymongo import MongoClient
 from bson.json_util import dumps
 from bson.objectid import ObjectId
@@ -6,14 +6,12 @@ import json
 
 # Import table creation functions
 from Data_Base.Create_Tables import create_table_Manager, create_table_Staff, create_table_Menue, create_table_Orders, create_table_Reservations
+from generateOrders import generate_orders
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 client = MongoClient()  # Connect to the default host and port 27017
 DB_admin = client["Restaurants_Management"] # Create a database called 'DB_admin'
-
-
-
 
 
 create_table_Manager(DB_admin)
@@ -41,6 +39,10 @@ def add_manager():
     }
     DB_admin.Manager.insert_one(manager)
     return "Manager added successfully"
+
+@app.route('/LogIn')
+def index5():
+    return render_template('LogInAs.html')
 
 @app.route('/MLogIn')
 def index2():
@@ -94,5 +96,45 @@ def add_menue():
     DB_admin.Menue.insert_many(menu_items)  # Use insert_many to insert multiple documents
     return "Menue added successfully"
 
+@app.route('/SLogIn')
+def staff_login():
+    return render_template('StaffLogIn.html')
+
+@app.route('/SLogIn', methods=['POST'])
+def staff_login_process():
+    data = request.json
+    staff_email = data.get('StaffEmail')
+    staff_password = data.get('StaffPassword')
+    staff = DB_admin.Staff.find_one({"StaffEmail": staff_email, "StaffPassword": staff_password})
+    if staff:
+        #session['staff_id'] = staff['StaffID']
+        return "Staff logged in successfully"
+    return "Staff not found"
+
+@app.route('/displayOrders', methods=['GET'])
+def display_orders():
+    # Fetch orders with status "placed" from the database
+    orders = list(DB_admin.Orders.find({"OrderStatus": "placed"}))
+    
+    # Render the HTML template and pass the orders to it
+    return render_template('DisplayOrders.html', orders=orders)
+
+@app.route('/updateOrderStatus/<order_id>', methods=['POST'])
+def update_order_status(order_id):
+    # Retrieve the staff ID from the session
+    staff_id = session.get('staff_id')
+    if staff_id is None:
+        return 'Unauthorized', 401
+    
+    # Update the order status to "In process" and assign the staff ID
+    DB_admin.Orders.update_one(
+        {"OrderID": order_id}, 
+        {"$set": {"OrderStatus": "In process", "StaffID": staff_id}}
+    )
+    return 'Status changed successfully to In process', 200
+
+
+
 if __name__ == '__main__':
+    generate_orders(10)
     app.run(debug=True)
